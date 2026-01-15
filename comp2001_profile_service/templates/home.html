@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ProfileService</title>
+</head>
+<body>
+    <h1>Profiles</h1>
+
+    {% for profile in profiles %}
+    <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+        <h2>{{ profile.full_name }} ({{ profile.username }})</h2>
+        <p><strong>Location:</strong> {{ profile.location }}</p>
+        <p><strong>Preferred Activity:</strong> {{ profile.preferred_activities }}</p>
+
+        {% if profile.notes %}
+        <h3>Notes:</h3>
+        <ul>
+            {% for note in profile.notes %}
+            <li>{{ note.content }} <em>({{ note.timestamp }})</em></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p><em>No notes for this profile.</em></p>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+</body>
+</html>
