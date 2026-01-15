@@ -1,0 +1,14 @@
+Flask==2.2.3
+Werkzeug==2.2.3
+
+connexion[swagger-ui]==2.14.0
+
+Flask-SQLAlchemy==3.0.3
+SQLAlchemy==1.4.54
+
+Flask-Marshmallow==0.15.0
+marshmallow==3.19.0
+marshmallow-sqlalchemy==0.29.0
+
+pyodbc==4.0.39
+pytz==2023.3
