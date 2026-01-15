@@ -1,0 +1,224 @@
+openapi: 3.0.0
+info:
+  title: Profile API
+  version: "1.0"
+  description: REST API for managing user profiles
+
+servers:
+  - url: http://localhost:8000/api
+
+paths:
+  /profiles:
+    get:
+      summary: Get all profiles
+      operationId: profile.read_all
+      responses:
+        '200':
+          description: List of all profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
+
+    post:
+      summary: Create a new profile
+      operationId: profile.create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileInput'
+      responses:
+        '201':
+          description: Profile created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '406':
+          description: Profile already exists
+
+  /profiles/{username}:
+    get:
+      summary: Get a profile by username
+      operationId: profile.read_one
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '404':
+          description: Profile not found
+
+    put:
+      summary: Update a profile by username
+      operationId: profile.update
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileInput'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '404':
+          description: Profile not found
+
+    delete:
+      summary: Delete a profile by username
+      operationId: profile.delete
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Profile deleted successfully
+        '404':
+          description: Profile not found
+
+  # ---- Notes endpoints ----
+  /notes:
+    post:
+      operationId: notes.create
+      tags:
+        - Notes
+      summary: "Create a note for a profile"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profile_id:
+                  type: integer
+                  description: "ID of the profile to attach note to"
+                content:
+                  type: string
+                  description: "Content of the note"
+              required:
+                - profile_id
+                - content
+      responses:
+        "201":
+          description: "Note created successfully"
+
+  /notes/{note_id}:
+    get:
+      operationId: notes.read_one
+      tags:
+        - Notes
+      summary: "Read a single note"
+      parameters:
+        - name: note_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successfully read note"
+
+    put:
+      operationId: notes.update
+      tags:
+        - Notes
+      summary: "Update a note"
+      parameters:
+        - name: note_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        "200":
+          description: "Successfully updated note"
+
+    delete:
+      operationId: notes.delete
+      tags:
+        - Notes
+      summary: "Delete a note"
+      parameters:
+        - name: note_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: "Successfully deleted note"
+
+components:
+  schemas:
+    Profile:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        full_name:
+          type: string
+        location:
+          type: string
+        personal_info:
+          type: string
+        preferred_activities:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    ProfileInput:
+      type: object
+      properties:
+        username:
+          type: string
+        full_name:
+          type: string
+        location:
+          type: string
+        personal_info:
+          type: string
+        preferred_activities:
+          type: string
+      required:
+        - username
+        - full_name
